@@ -1,23 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import { useCallback, useState } from "react";
+import "./App.css";
 
 function App() {
+  const [count, setCount] = useState(0);
+  const [errorText, setErrorText] = useState("");
+
+  const increaseCount = useCallback(() => {
+    setErrorText("");
+    setCount((prev) => prev + 1);
+  }, [count]);
+
+  const decreaseCount = useCallback(() => {
+    if (count === 0) {
+      setErrorText("Can not go below 0");
+      return;
+    }
+    setCount((prev) => prev - 1);
+  }, [count]);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="timer">
+        <button onClick={decreaseCount}>-</button>
+        <div>{count}</div>
+        <button onClick={increaseCount}>+</button>
+      </div>
+      {errorText ? <p>{errorText}</p> : null}
     </div>
   );
 }
